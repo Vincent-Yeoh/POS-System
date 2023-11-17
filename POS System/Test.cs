@@ -8,8 +8,8 @@ namespace POS_System
 {
     public class Test
     {
-        string Name { get; set; }
-        float Price { get; set; }
+        public string Name { get; set; }
+        public float Price { get; set; }
 
         public Test(string name, float price)
         {

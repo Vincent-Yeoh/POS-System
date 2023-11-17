@@ -1,20 +1,94 @@
 ﻿<Window x:Class="POS_System.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:POS_System"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
     <Grid>
-        <ListView Name="myListView" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Column 1" DisplayMemberBinding="{Binding Property1}" Width="100"/>
-                    <GridViewColumn Header="Column 2" DisplayMemberBinding="{Binding Property2}" Width="150"/>
-                </GridView>
-            </ListView.View>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--<Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>-->
+
+        <DockPanel Background="Black">
+            <StackPanel Orientation="Horizontal" Background="Blue" DockPanel.Dock="Left">
+                <TextBlock Text="Fresh and Healthy"  Foreground="White" VerticalAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Background="Black" DockPanel.Dock="Right" VerticalAlignment="Center">
+                <Button Command="{Binding ClickCommand}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <iconPacks:PackIconBootstrapIcons Kind="ThreeDotsVertical" Foreground="White" ></iconPacks:PackIconBootstrapIcons>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Text="RM0.00" Foreground="White"></TextBlock>
+                <iconPacks:PackIconBootstrapIcons Kind="upc" Foreground="White" ></iconPacks:PackIconBootstrapIcons>
+                <iconPacks:PackIconBootstrapIcons Kind="Search" Foreground="White" ></iconPacks:PackIconBootstrapIcons>
+            </StackPanel>
+        </DockPanel>
+
+        <ListView Name="myListView" Grid.Row="2" ItemsSource="{Binding test}"  >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"></ColumnDefinition>
+                            <ColumnDefinition Width ="2*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <!--<Border BorderBrush="Black" BorderThickness="1" Margin="5" Padding="5" Width="Auto">-->
+                        <StackPanel VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">
+
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            <TextBlock Text="V0000" />
+                            <TextBlock Text="{Binding Price}" />
+                            <TextBlock Text="Uom"></TextBlock>
+                            <StackPanel Orientation="Horizontal">
             
+                                <TextBox Text="KG"></TextBox >
+                                <iconPacks:PackIconBootstrapIcons Kind="PlusSquare"/>
+                                <TextBox Text=""></TextBox >
+                                <iconPacks:PackIconBootstrapIcons Kind="DashSquare"/>
+                                <iconPacks:PackIconBootstrapIcons Kind="Cart"/>
+
+                                <TextBlock Text="Add To Cart"/>
+
+                            </StackPanel>
+                            
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" FlowDirection="RightToLeft">
+                            <Image Source="C:\Users\60135\source\repos\POS System\POS System\apple.jpeg" MaxHeight="100"/>
+
+
+                        </StackPanel>
+
+                   
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
+
     </Grid>
 </Window>
