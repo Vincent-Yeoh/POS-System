@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using MangoMartDb;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,16 +13,36 @@ namespace POS_System
     internal class MainViewModel : ViewModel
     {
         public RelayCommand ClickCommand { get; set; }
-        public List<Test> test { get; set; } = new List<Test>();
+        public ObservableCollection<ProductViewModel> test { get; set; } = new ObservableCollection<ProductViewModel>();
 
         public string testingText { get; set; }
-        public MainViewModel()
+        public MangoDatabase _database { get; set; }
+
+        public MainViewModel(MangoDatabase database)
         {
-            ClickCommand = new RelayCommand(() => new Database().GetData());
-            testingText = "If u happy and u know it clap your cheeks";
-            //OnPropertyChanged(nameof(testingText));
-            test.Add(new Test("Hello", 1));
-            test.Add(new Test("World", 2));
+        
+            
+
+            _database = database;
+            InitializeDatabase(_database);
+            
+        }
+
+        public async void InitializeDatabase(MangoDatabase database)
+        {
+            var productList = await database.GetData();
+            foreach (var product in productList)
+            {
+                test.Add(new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Sku = product.Sku,
+                    InStock = product.InStock,
+                    Image = product.Images.FirstOrDefault().Src
+                });
+            }
         }
     }
 }
