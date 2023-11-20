@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MangoMartDb\MangoMartDb.csproj" />
+    <ProjectReference Include="..\MangoMartDbService\MangoMartDbService.csproj" />
   </ItemGroup>
 
 </Project>

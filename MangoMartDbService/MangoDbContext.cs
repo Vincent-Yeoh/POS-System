@@ -1,7 +1,6 @@
 ﻿using MangoMartDb.DTOs;
 using MangoMartDb.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +14,7 @@ namespace MangoMartDb
         private string _connectionString;
         public MangoDbContext()
         {
-            _connectionString = "DataSource=Test.db";
-                //System.Configuration.ConfigurationManager.ConnectionStrings["conn"].ConnectionString;
+            _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["conn"].ConnectionString;
         }
         public DbSet<Product> Products { get; set; }
 
