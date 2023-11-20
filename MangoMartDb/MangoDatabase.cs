@@ -8,6 +8,7 @@ using Azure.Core.Pipeline;
 using Microsoft.EntityFrameworkCore;
 using MangoMartDb.DTOs;
 using System.Net.NetworkInformation;
+using System.Net.Http.Headers;
 
 namespace MangoMartDb
 {
@@ -34,14 +35,29 @@ namespace MangoMartDb
 
         public async Task<List<ProductDTO>> GetData()
         {
+  
+
+            List<ProductDTO> products = new List<ProductDTO>();
+
             var request = new RestRequest(_url);
-
             var response = await _client.GetAsync(request);
-            var totalObject = response.Headers;
 
+            if (!response.IsSuccessful) return products;
 
-            var dbObject = JsonConvert.DeserializeObject<List<ProductDTO>>(response.Content!);
-            return dbObject;
+            Int32.TryParse(response.Headers!.ToList().Find(x => x.Name == "X-WP-Total")!.Value!.ToString(), out int totalObject);
+            if (!Int32.TryParse(response.Headers!.ToList().Find(x => x.Name == "X-WP-TotalPages")!.Value!.ToString(), out int totalPages)) return products;
+
+            for(int i = 1; i <= totalPages; i++)
+            {
+                string page_url = $"{_url}?page={i}";
+                var pageRequest = new RestRequest(page_url);
+                var pageResponse = await _client.GetAsync(pageRequest);
+
+                if (!pageResponse.IsSuccessful) continue;
+                List<ProductDTO> product = JsonConvert.DeserializeObject<List<ProductDTO>>(pageResponse.Content!);
+                products.AddRange(product);
+            }
+            return products;
 
         }
         public async Task EnsureCreated()
@@ -63,22 +79,7 @@ namespace MangoMartDb
             }
         }
 
-        public async Task<byte[]?> DownloadImageAsync(string imageUrl)
-        {
-            HttpClient client = new HttpClient();
-            using (var response = await client.GetAsync(imageUrl))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsByteArrayAsync();
-                }
-                else
-                {
-                    // Handle error (e.g., return null or throw an exception)
-                    return null;
-                }
-            }
-        }
+     
 
         public async Task RetrieveData(List<ProductDTO> productDTOs)
         {
@@ -90,8 +91,9 @@ namespace MangoMartDb
                     if (context.Products.Any(x => x.Id == productDTO.Id)) continue;
                     Product product = await Product.MapDTO(productDTO);
                     context.Products.Add(product);
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
+
             }
         }
 
