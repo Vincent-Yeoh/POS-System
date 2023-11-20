@@ -20,7 +20,7 @@ namespace POS_System
 
         public MainViewModel(MangoDatabase database)
         {
-        
+            
             
 
             _database = database;
@@ -30,7 +30,7 @@ namespace POS_System
 
         public async void InitializeDatabase(MangoDatabase database)
         {
-            var productList = await database.GetData();
+            var productList = database.B();
             foreach (var product in productList)
             {
                 test.Add(new ProductViewModel
@@ -40,7 +40,7 @@ namespace POS_System
                     Price = product.Price,
                     Sku = product.Sku,
                     InStock = product.InStock,
-                    Image = product.Images.FirstOrDefault().Src
+                    Image = product.ImageFilePath,
                 });
             }
         }

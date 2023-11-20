@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MangoMartDb.DTOs;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace MangoMartDb
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Product);
+            return objectType == typeof(ProductDTO);
         }
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
@@ -29,7 +30,7 @@ namespace MangoMartDb
                 price = "0";
             }
             Console.WriteLine(price);
-            Product product = new Product
+            ProductDTO product = new ProductDTO
             {
                 Id = (string)jObject["id"],
                 Name = (string)jObject["name"],

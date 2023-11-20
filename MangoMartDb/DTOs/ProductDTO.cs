@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MangoMartDb
+namespace MangoMartDb.DTOs
 {
 
 
@@ -33,7 +33,7 @@ namespace MangoMartDb
         public double? Price { get; set; }
     }
 
-    public class Product
+    public class ProductDTO
     {
 
         [JsonProperty("id")]
@@ -56,9 +56,6 @@ namespace MangoMartDb
 
         [JsonProperty("images")]
         public List<ProductImage>? Images { get; set; }
-
-
-
     }
 }
 

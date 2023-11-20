@@ -41,8 +41,12 @@ namespace POS_System
 
      
             await AppHost!.StartAsync();
+            var database = AppHost.Services.GetRequiredService<MangoDatabase>();
+            await database.EnsureCreated();
             var startUpForm = AppHost.Services.GetRequiredService<MainWindow>();
             startUpForm.DataContext = AppHost.Services.GetService<MainViewModel>();
+
+     
             startUpForm.Show();
 
             base.OnStartup(e);
