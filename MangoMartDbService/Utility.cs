@@ -11,9 +11,12 @@ namespace MangoMartDb
 {
     internal class Utility
     {
-        public static async Task<string> DownloadImageAsFile(string uri, string saveDir)
+        public static async Task<string> DownloadImageAsFile(string uri)
         {
-            using(var client = new HttpClient())
+
+            string saveDir = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "product_images");
+
+            using (var client = new HttpClient())
             {
                 try
                 {

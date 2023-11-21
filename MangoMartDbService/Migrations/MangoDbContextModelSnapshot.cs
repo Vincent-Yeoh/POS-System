@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MangoMartDbService.Migrations
 {
-    [DbContext(typeof(MangoDbContext))]
+    [DbContext(typeof(MangoMartDb.LocalDbContext))]
     partial class MangoDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

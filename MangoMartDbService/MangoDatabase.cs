@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using MangoMartDbService;
 
 namespace MangoMartDb
 {
@@ -22,12 +23,14 @@ namespace MangoMartDb
         private string _password;
         private string _url;
         private RestClient _client;
+        private LocalDbContextFactory dbFactory;
 
-        public MangoDatabase(string username, string password, string url)
+        public MangoDatabase(string username, string password, string url, string connectionString)
         {
             _username = username;
             _password = password;
             _url = url;
+            dbFactory = new LocalDbContextFactory(connectionString);
             var options = new RestClientOptions()
             {
                 Authenticator = new HttpBasicAuthenticator(_username, password)
@@ -64,7 +67,7 @@ namespace MangoMartDb
         }
         public async Task EnsureCreated()
         {
-            using (var context = new MangoDbContext())
+            using (var context = dbFactory.CreateDbContext())
             {
                 context.Database.Migrate();
             }
@@ -86,7 +89,7 @@ namespace MangoMartDb
         public async Task RetrieveData(List<ProductDTO> productDTOs)
         {
 
-            using(var context = new MangoDbContext())
+            using(var context = dbFactory.CreateDbContext())
             {
                 foreach(var productDTO in productDTOs)
                 {
@@ -101,7 +104,7 @@ namespace MangoMartDb
 
         public List<Product> B()
         {
-            using (var context = new MangoDbContext())
+            using (var context = dbFactory.CreateDbContext())
             {
                 return context.Products.ToList();
            

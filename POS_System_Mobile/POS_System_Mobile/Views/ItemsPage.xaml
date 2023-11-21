@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="POS_System_Mobile.Views.ItemsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:POS_System_Mobile.ViewModels"
+    xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+    xmlns:model="clr-namespace:POS_System_Mobile.Models"
+    x:Name="BrowseItemsPage"
+    Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddItemCommand}" Text="Add" />
+    </ContentPage.ToolbarItems>
+    <!--
+        x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <Grid>
+
+
+        <RefreshView
+            Command="{Binding LoadItemsCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView
+                x:Name="ItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <StackLayout Margin="0,5,0,5">
+                            <material:MaterialCard
+                                Padding="10"
+                                Elevation="2"
+                                IsClickable="False">
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+
+
+                                        <StackLayout
+                                            Orientation="Vertical"
+                                            Spacing="0"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="Large"
+                                                Text="{Binding Name}" />
+                                            <Label Text="{Binding Sku}" />
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="Medium"
+                                                Text="{Binding Price,StringFormat='{0:C}'}" />
+                                        </StackLayout>
+
+                                        <BoxView HorizontalOptions="FillAndExpand" Color="Transparent" />
+                                        <Image
+                                            Aspect="AspectFit"
+                                            HeightRequest="100"
+                                            Source="{Binding Image}" />
+                                    </StackLayout>
+
+                                    <StackLayout>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="3*" />
+                                                <ColumnDefinition Width="2*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="55" />
+                                            </Grid.RowDefinitions>
+
+                                            <Entry Grid.Column="0" Text="KG" />
+                                            <StackLayout
+                                                Grid.Column="1"
+                                                Orientation="Horizontal"
+                                                Spacing="0">
+                                                <Button Text="+" WidthRequest="50" />
+
+                                                <Frame HasShadow="True" HorizontalOptions="FillAndExpand">
+                                                    <Label
+                                                        x:Name="value"
+                                                        HorizontalOptions="CenterAndExpand"
+                                                        Text="0" />
+
+                                                </Frame>
+                                                <Button
+                                                    BackgroundColor="Blue"
+                                                    Text="-"
+                                                    WidthRequest="50" />
+
+                                                <!--<material:MaterialButton HorizontalOptions="Center" Text="-" />-->
+                                            </StackLayout>
+                                            <StackLayout
+                                                Grid.Column="2"
+                                                Orientation="Horizontal"
+                                                Spacing="0">
+
+                                                <Button HorizontalOptions="FillAndExpand" Text="Add To Cart" />
+
+                                            </StackLayout>
+
+
+
+
+
+
+                                        </Grid>
+
+
+
+                                    </StackLayout>
+                                </StackLayout>
+                            </material:MaterialCard>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

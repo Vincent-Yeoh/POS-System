@@ -32,7 +32,7 @@ namespace MangoMartDb.Models
                 Sku = DTO.Sku,
                 Price = DTO.Price,
                 InStock = DTO.InStock,
-                ImageFilePath = await Utility.DownloadImageAsFile(DTO.Images?.FirstOrDefault()?.Src!, "Images"),
+                ImageFilePath = await Utility.DownloadImageAsFile(DTO.Images?.FirstOrDefault()?.Src!),
             };
         }
 

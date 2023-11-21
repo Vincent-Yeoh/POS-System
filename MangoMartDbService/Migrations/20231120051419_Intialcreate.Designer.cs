@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MangoMartDbService.Migrations
 {
-    [DbContext(typeof(MangoDbContext))]
+    [DbContext(typeof(MangoMartDb.LocalDbContext))]
     [Migration("20231120051419_Intialcreate")]
     partial class Intialcreate
     {
