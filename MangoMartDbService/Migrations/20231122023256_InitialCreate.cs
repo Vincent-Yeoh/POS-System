@@ -2,7 +2,7 @@
 
 namespace MangoMartDbService.Migrations
 {
-    public partial class Intialcreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,8 @@ namespace MangoMartDbService.Migrations
                     Sku = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<double>(type: "REAL", nullable: true),
                     InStock = table.Column<bool>(type: "INTEGER", nullable: true),
-                    ImageFilePath = table.Column<string>(type: "TEXT", nullable: true)
+                    ImageFilePath = table.Column<string>(type: "TEXT", nullable: true),
+                    PageNumber = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {

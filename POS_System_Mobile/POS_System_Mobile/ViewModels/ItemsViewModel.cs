@@ -1,4 +1,4 @@
-﻿using MangoMartDb;
+﻿using MangoMartDbService.Services;
 using POS_System;
 using POS_System_Mobile.Models;
 using POS_System_Mobile.Views;
@@ -19,11 +19,11 @@ namespace POS_System_Mobile.ViewModels
         public Command AddItemCommand { get; }
         public Command<Item> ItemTapped { get; }
 
-        private MangoDatabase _dbService { get; }
+        private DatabaseService _dbService { get; }
 
         public ItemsViewModel()
         {
-            _dbService = ((App)Application.Current).ServiceProvider.GetService(typeof(MangoDatabase)) as MangoDatabase;
+            _dbService = ((App)Application.Current).ServiceProvider.GetService(typeof(DatabaseService)) as DatabaseService;
             
             Title = "Browse";
             Items = new ObservableCollection<ProductViewModel>();
@@ -51,7 +51,7 @@ namespace POS_System_Mobile.ViewModels
                             Price = item.Price,
                             Sku = item.Sku,
                             InStock = item.InStock,
-                            Image = item.ImageFilePath,
+                            Image = item.Image,
                         }
                         );
                     

@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MangoMartDb;
+using MangoMartDb.DTOs;
+using MangoMartDb.Models;
+using MangoMartDbService.Services;
+using POS_System.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,42 +10,60 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace POS_System
 {
     internal class MainViewModel : ViewModel
     {
-        public RelayCommand ClickCommand { get; set; }
-        public ObservableCollection<ProductViewModel> test { get; set; } = new ObservableCollection<ProductViewModel>();
+        public RelayCommand LoadCommand { get; set; }
 
-        public string testingText { get; set; }
-        public MangoDatabase _database { get; set; }
-
-        public MainViewModel(MangoDatabase database)
+        private bool _isLoading = false;
+        public bool IsLoading 
         {
-            
-            
+            get => _isLoading;
+            set {
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }  
+        public ObservableCollection<ProductViewModel> Products { get; set; } = new ObservableCollection<ProductViewModel>();
+        private int _pageCounter = 1;
+        private int _pageSize = 0;
+        public string testingText { get; set; }
+        public IDatabaseService _databaseService { get; }
 
-            _database = database;
-            InitializeDatabase(_database);
-            
+        public MainViewModel(IDatabaseService databaseService)
+        {
+            _databaseService = databaseService;
+            LoadCommand = new RelayCommand(OnLoadCommand);
+            InitializeDatabase();
+
         }
 
-        public async void InitializeDatabase(MangoDatabase database)
+        private async void OnLoadCommand()
         {
-            var productList = database.B();
-            foreach (var product in productList)
+            IsLoading = true;
+            await LoadData();
+            IsLoading = false;
+        }
+        private async Task LoadData()
+        {
+           
+            if (_pageCounter > _pageSize) return;
+            List<Product> products = await _databaseService.Get(_pageCounter++);
+
+            foreach (Product product in products)
             {
-                test.Add(new ProductViewModel
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Price = product.Price,
-                    Sku = product.Sku,
-                    InStock = product.InStock,
-                    Image = product.ImageFilePath,
-                });
+                Products.Add(ProductViewModel.MapProduct(product));
             }
+        
+        }
+
+        public async void InitializeDatabase()
+        {
+            _pageSize = await _databaseService.GetPageTotal();
+            await LoadData();
         }
     }
 }

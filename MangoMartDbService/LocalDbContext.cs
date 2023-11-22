@@ -9,19 +9,22 @@ using System.Threading.Tasks;
 
 namespace MangoMartDb
 {
-    internal class LocalDbContext : DbContext
+    public class LocalDbContext : DbContext
     {
+
+        //To perform ef database migrations, run the following commands in PMC
+        //dotnet ef migrations add [MigrationName] --project MangoMartDbService --startup-project ApiDriver --verbose
+
+
         private string _connectionString;
-        public LocalDbContext(string connectionString)
+        public LocalDbContext(string connectionString = "")
         {
-            _connectionString = connectionString;
+            _connectionString = string.IsNullOrEmpty(connectionString) ? "Data Source=MangoLocalDb.db" : connectionString;
         }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Product>? Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //string dbPath = Path.Combine(AppContext.BaseDirectory, "MangoLocalDb.mdf");
-            //Console.WriteLine(dbPath);
            
             optionsBuilder.UseSqlite(_connectionString);
             base.OnConfiguring(optionsBuilder);

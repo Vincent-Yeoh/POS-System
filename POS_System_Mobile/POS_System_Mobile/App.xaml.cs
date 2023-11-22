@@ -1,4 +1,4 @@
-﻿using MangoMartDb;
+﻿using MangoMartDbService.Services;
 using Microsoft.Extensions.DependencyInjection;
 using POS_System_Mobile.Services;
 using POS_System_Mobile.Views;
@@ -41,14 +41,14 @@ namespace POS_System_Mobile
         
        
 
-    serviceCollection.AddSingleton<MangoDatabase>(_ => new MangoDatabase("ck_2682b35c4d9a8b6b6effac126ac552e0bfb315a0", "cs_cab8c9a729dfb49c50ce801a9ea41b577c00ad71", "https://mangomart-autocount.myboostorder.com/wp-json/wc/v1/products", $"Filename={dbPath}"));
+    serviceCollection.AddSingleton<DatabaseService>(_ => new DatabaseService("ck_2682b35c4d9a8b6b6effac126ac552e0bfb315a0", "cs_cab8c9a729dfb49c50ce801a9ea41b577c00ad71", "https://mangomart-autocount.myboostorder.com/wp-json/wc/v1/products", $"Filename={dbPath}"));
         }
 
         protected override async void OnStart()
         {
 
 
-            var dbService = ServiceProvider.GetService<MangoDatabase>();
+            var dbService = ServiceProvider.GetService<DatabaseService>();
             //await dbService.EnsureCreated();
             var i = dbService.B();
         }

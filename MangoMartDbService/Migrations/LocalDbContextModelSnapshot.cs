@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MangoMartDbService.Migrations
 {
-    [DbContext(typeof(MangoMartDb.LocalDbContext))]
-    partial class MangoDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(LocalDbContext))]
+    partial class LocalDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace MangoMartDbService.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ImageFilePath")
+                    b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
                     b.Property<bool?>("InStock")
@@ -29,6 +29,9 @@ namespace MangoMartDbService.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("PageNumber")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double?>("Price")
                         .HasColumnType("REAL");

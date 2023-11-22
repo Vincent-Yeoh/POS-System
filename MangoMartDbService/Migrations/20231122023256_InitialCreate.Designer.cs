@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MangoMartDbService.Migrations
 {
-    [DbContext(typeof(MangoMartDb.LocalDbContext))]
-    [Migration("20231120051419_Intialcreate")]
-    partial class Intialcreate
+    [DbContext(typeof(LocalDbContext))]
+    [Migration("20231122023256_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace MangoMartDbService.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("PageNumber")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double?>("Price")
                         .HasColumnType("REAL");

@@ -20,7 +20,9 @@ namespace MangoMartDb.Models
 
         public bool? InStock { get; set; }
 
-        public string? ImageFilePath { get; set; }
+        public string? Image { get; set; }
+
+        public int? PageNumber { get; set; }
 
 
         public async static Task<Product> MapDTO(ProductDTO DTO)
@@ -32,7 +34,7 @@ namespace MangoMartDb.Models
                 Sku = DTO.Sku,
                 Price = DTO.Price,
                 InStock = DTO.InStock,
-                ImageFilePath = await Utility.DownloadImageAsFile(DTO.Images?.FirstOrDefault()?.Src!),
+                Image = await Utility.DownloadImageAsFile(DTO.Images?.FirstOrDefault()?.Src!),
             };
         }
 
