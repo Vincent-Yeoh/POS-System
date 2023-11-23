@@ -2,7 +2,6 @@
 using MangoMartDb.DTOs;
 using MangoMartDb.Models;
 using MangoMartDbService.Services;
-using POS_System.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,24 +11,30 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 
-namespace POS_System
+namespace POS_System.ViewModels
 {
     internal class MainViewModel : ViewModel
     {
         public RelayCommand LoadCommand { get; set; }
-
+        private int test = 0;
+        public int Test { get => test; set { test = value;
+                Console.WriteLine(test);
+            } }
         private bool _isLoading = false;
-        public bool IsLoading 
+        public bool IsLoading
         {
             get => _isLoading;
-            set {
+            set
+            {
                 _isLoading = value;
                 OnPropertyChanged(nameof(IsLoading));
             }
-        }  
+        }
         public ObservableCollection<ProductViewModel> Products { get; set; } = new ObservableCollection<ProductViewModel>();
         private int _pageCounter = 1;
         private int _pageSize = 0;
+ 
+
         public string testingText { get; set; }
         public IDatabaseService _databaseService { get; }
 
@@ -49,7 +54,7 @@ namespace POS_System
         }
         private async Task LoadData()
         {
-           
+
             if (_pageCounter > _pageSize) return;
             List<Product> products = await _databaseService.Get(_pageCounter++);
 
@@ -57,7 +62,7 @@ namespace POS_System
             {
                 Products.Add(ProductViewModel.MapProduct(product));
             }
-        
+
         }
 
         public async void InitializeDatabase()

@@ -3,6 +3,7 @@ using MangoMartDbService.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using POS_System.ViewModels;
 using System.Configuration;
 using System.Data;
 using System.IO;
