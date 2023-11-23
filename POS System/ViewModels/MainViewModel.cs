@@ -16,10 +16,7 @@ namespace POS_System.ViewModels
     internal class MainViewModel : ViewModel
     {
         public RelayCommand LoadCommand { get; set; }
-        private int test = 0;
-        public int Test { get => test; set { test = value;
-                Console.WriteLine(test);
-            } }
+
         private bool _isLoading = false;
         public bool IsLoading
         {

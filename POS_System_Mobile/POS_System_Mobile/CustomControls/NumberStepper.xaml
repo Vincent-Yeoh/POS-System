@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Grid
+    x:Class="POS_System_Mobile.CustomControls.NumberStepper"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="number_stepper">
+    <StackLayout Orientation="Horizontal">
+        <Button
+            x:Name="BtnMinus"
+            BackgroundColor="{Binding BtnColor, Source={x:Reference number_stepper}}"
+            Clicked="BtnMinus_Clicked"
+            Text="-"
+            WidthRequest="50" />
+
+        <Frame HasShadow="True" HorizontalOptions="FillAndExpand">
+            <Label
+                x:Name="value"
+                HorizontalOptions="CenterAndExpand"
+                Text="{Binding Value, Source={x:Reference number_stepper}}" />
+
+        </Frame>
+        <Button
+            x:Name="BtnPlus"
+            BackgroundColor="{Binding BtnColor, Source={x:Reference number_stepper}}"
+            Clicked="BtnPlus_Clicked"
+            Text="+"
+            WidthRequest="50" />
+    </StackLayout>
+</Grid>

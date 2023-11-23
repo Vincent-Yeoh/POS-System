@@ -19,11 +19,11 @@ namespace POS_System_Mobile.ViewModels
         public Command AddItemCommand { get; }
         public Command<Item> ItemTapped { get; }
 
-        private DatabaseService _dbService { get; }
+        private DatabaseService _databaseService { get; }
 
         public ItemsViewModel()
         {
-            _dbService = ((App)Application.Current).ServiceProvider.GetService(typeof(DatabaseService)) as DatabaseService;
+            _databaseService = ((App)Application.Current).ServiceProvider.GetService(typeof(DatabaseService)) as DatabaseService;
             
             Title = "Browse";
             Items = new ObservableCollection<ProductViewModel>();
@@ -41,7 +41,7 @@ namespace POS_System_Mobile.ViewModels
             try
             {
                 Items.Clear();
-                var items = _dbService.B();
+                var items = await _databaseService.Get(1);
                 foreach (var item in items)
                 {
                     Items.Add(
@@ -54,7 +54,7 @@ namespace POS_System_Mobile.ViewModels
                             Image = item.Image,
                         }
                         );
-                    
+              
                 }
             }
             
