@@ -1,4 +1,4 @@
-﻿using POS_System_Mobile.Models;
+﻿
 using POS_System_Mobile.ViewModels;
 using POS_System_Mobile.Views;
 using System;
@@ -26,7 +26,6 @@ namespace POS_System_Mobile.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _viewModel.OnAppearing();
         }
 
         public async void OnTapFrameRecognized(object sender, EventArgs args)

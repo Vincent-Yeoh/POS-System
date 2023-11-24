@@ -12,13 +12,15 @@
             Text="-"
             WidthRequest="50" />
 
-        <Frame HasShadow="True" HorizontalOptions="FillAndExpand">
-            <Label
-                x:Name="value"
-                HorizontalOptions="CenterAndExpand"
-                Text="{Binding Value, Source={x:Reference number_stepper}}" />
 
-        </Frame>
+
+        <Label
+            x:Name="value"
+            Margin="10,0,10,0"
+            Text="{Binding Value, Source={x:Reference number_stepper}}"
+            VerticalOptions="Center" />
+
+
         <Button
             x:Name="BtnPlus"
             BackgroundColor="{Binding BtnColor, Source={x:Reference number_stepper}}"

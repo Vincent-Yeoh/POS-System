@@ -16,6 +16,6 @@ DatabaseService mangoDb = new DatabaseService(username, password, uri, Configura
     ConnectionStrings["conn"].ConnectionString);
 
 
-
+var i = await mangoDb.Get(1);
 
 Console.ReadLine();

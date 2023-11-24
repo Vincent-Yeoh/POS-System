@@ -1,4 +1,5 @@
 ﻿using MangoMartDb.DTOs;
+using MangoMartDbService.DTOs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace MangoMartDb.Models
 {
     public class Product
     {
-        public string? Id { get; set; }
+        public int? Id { get; set; }
 
         public string? Name { get; set; }
 
@@ -24,23 +25,31 @@ namespace MangoMartDb.Models
 
         public int? PageNumber { get; set; }
 
+        public string? Options { get; set; }
 
-        public async static Task<Product> MapDTO(ProductDTO DTO)
+
+
+
+        public static async Task<Product> MapDTO(ProductDTO DTO)
         {
             return new Product
             {
                 Id = DTO.Id,
                 Name = DTO.Name,
                 Sku = DTO.Sku,
-                Price = DTO.Price,
+                Price = DTO.RegularPrice,
                 InStock = DTO.InStock,
+                Options = DTO.Attributes?.FirstOrDefault()?.Options != null
+    ? string.Join(",", DTO.Attributes.FirstOrDefault().Options)
+    : null,
                 Image = await Utility.DownloadImageAsFile(DTO.Images?.FirstOrDefault()?.Src!),
+
             };
         }
 
     }
 
-  
+
 
 
 }

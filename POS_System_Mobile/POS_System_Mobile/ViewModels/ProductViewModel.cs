@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POS_System
+namespace POS_System_Mobile.ViewModels
 {
     public class ProductViewModel : BaseViewModel
     {
 
-        public string? Id { get; set; }
+        public int? Id { get; set; }
         public string? Name { get; set; }
 
         private string? _sku;
@@ -22,6 +22,8 @@ namespace POS_System
         }
 
         private double _price = 0.0;
+
+        public List<string>? Options { get; set; }
 
 
         public double? Price
@@ -35,11 +37,13 @@ namespace POS_System
 
         public static ProductViewModel MapProduct(Product product)
         {
+            var options = product.Options?.Split(',').ToList();
             return new ProductViewModel
             {
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
+                Options = options,
                 Sku = product.Sku,
                 InStock = product.InStock,
                 Image = product.Image,

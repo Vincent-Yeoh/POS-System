@@ -6,24 +6,44 @@
     xmlns:cc="clr-namespace:POS_System_Mobile.CustomControls"
     xmlns:local="clr-namespace:POS_System_Mobile.ViewModels"
     xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
-    xmlns:model="clr-namespace:POS_System_Mobile.Models"
-    x:Name="BrowseItemsPage"
-    Title="{Binding Title}">
+    x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding AddItemCommand}" Text="Add" />
+
+
+        <ToolbarItem>
+            <ToolbarItem.IconImageSource>
+                <FileImageSource File="search_symbol.png" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+        <ToolbarItem>
+            <ToolbarItem.IconImageSource>
+                <FileImageSource File="barcode.png" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+        <ToolbarItem Text="RM0.00" />
+
+        <ToolbarItem>
+            <ToolbarItem.IconImageSource>
+                <FileImageSource File="dots.png" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+
     </ContentPage.ToolbarItems>
-    <!--
-        x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
-        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
-    -->
+    <ContentPage.Title>
+        Fresh &amp; Healthy
+    </ContentPage.Title>
+
     <Grid>
 
 
         <RefreshView Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
             <CollectionView
                 x:Name="ItemsListView"
-                ItemsSource="{Binding Items}"
+                ItemsSource="{Binding Products}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
 
@@ -36,15 +56,13 @@
                                 IsClickable="False">
                                 <StackLayout>
                                     <StackLayout Orientation="Horizontal">
-
-
                                         <StackLayout
                                             Orientation="Vertical"
                                             Spacing="0"
                                             VerticalOptions="Center">
                                             <Label
                                                 FontAttributes="Bold"
-                                                FontSize="Large"
+                                                FontSize="20"
                                                 Text="{Binding Name}" />
                                             <Label Text="{Binding Sku}" />
                                             <Label
@@ -57,51 +75,57 @@
                                         <Image
                                             Aspect="AspectFit"
                                             HeightRequest="100"
-                                            Source="{Binding Image}" />
+                                            Source="{Binding Image}"
+                                            WidthRequest="100" />
                                     </StackLayout>
 
-                                    <StackLayout>
-
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="3*" />
-                                                <ColumnDefinition Width="2*" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="55" />
-                                            </Grid.RowDefinitions>
-
-                                            <Entry Grid.Column="0" Text="KG" />
-                                            <StackLayout
-                                                Grid.Column="1"
-                                                Orientation="Horizontal"
-                                                Spacing="0">
-                                                <StackLayout x:Name="Container">
-                                                    <cc:NumberStepper BtnColor="Red" MaxValue="20" />
-                                                </StackLayout>
-
-                                            </StackLayout>
-                                            <StackLayout
-                                                Grid.Column="2"
-                                                Orientation="Horizontal"
-                                                Spacing="0">
-
-                                                <Button HorizontalOptions="FillAndExpand" Text="Add To Cart" />
-
-                                            </StackLayout>
 
 
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="2*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40" />
+                                        </Grid.RowDefinitions>
+                                        <Picker
+                                            Grid.Column="0"
+                                            ItemsSource="{Binding Options}"
+                                            SelectedIndex="0"
+                                            SelectedItem="{Binding Options[0]}"
+                                            VerticalOptions="End" />
+
+                                        <StackLayout Grid.Column="1">
+                                            <cc:NumberStepper
+                                                BtnColor="{StaticResource Primary}"
+                                                HorizontalOptions="Center"
+                                                MaxValue="20" />
+                                        </StackLayout>
 
 
+                                        <StackLayout
+                                            Grid.Column="2"
+                                            BackgroundColor="Red"
+                                            HorizontalOptions="Center"
+                                            Orientation="Horizontal"
+                                            Spacing="0">
+                                            <Button BackgroundColor="Green" Text="Add to Cart" />
 
-
-                                        </Grid>
+                                        </StackLayout>
 
 
 
-                                    </StackLayout>
+
+
+
+                                    </Grid>
+
+
+
+
                                 </StackLayout>
                             </material:MaterialCard>
                         </StackLayout>

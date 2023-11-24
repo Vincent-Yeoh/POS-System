@@ -14,7 +14,7 @@ namespace MangoMartDb
         public static async Task<string> DownloadImageAsFile(string uri)
         {
 
-            string saveDir = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "product_images");
+            string saveDir = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "POS_System","product_images");
 
             using (var client = new HttpClient())
             {

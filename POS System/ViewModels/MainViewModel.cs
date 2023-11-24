@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using MangoMartDb.DTOs;
 using MangoMartDb.Models;
+using MangoMartDbService.Messages;
 using MangoMartDbService.Services;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
+using Product = MangoMartDb.Models.Product;
 
 namespace POS_System.ViewModels
 {
-    internal class MainViewModel : ViewModel
+    internal class MainViewModel : ViewModelBase
     {
         public RelayCommand LoadCommand { get; set; }
 
@@ -28,8 +31,7 @@ namespace POS_System.ViewModels
             }
         }
         public ObservableCollection<ProductViewModel> Products { get; set; } = new ObservableCollection<ProductViewModel>();
-        private int _pageCounter = 1;
-        private int _pageSize = 0;
+ 
  
 
         public string testingText { get; set; }
@@ -37,35 +39,34 @@ namespace POS_System.ViewModels
 
         public MainViewModel(IDatabaseService databaseService)
         {
+            WeakReferenceMessenger.Default.Register<ProductBatch>(this, OnReceiveProductBatch);
             _databaseService = databaseService;
-            LoadCommand = new RelayCommand(OnLoadCommand);
             InitializeDatabase();
 
         }
 
-        private async void OnLoadCommand()
+
+        public void InitializeDatabase()
         {
-            IsLoading = true;
-            await LoadData();
-            IsLoading = false;
+            var products = _databaseService.InitiateDataStream();
+            MapProductViewModel(products);
         }
-        private async Task LoadData()
+
+        private void OnReceiveProductBatch(object recipient, ProductBatch message)
         {
+            MapProductViewModel(message.Value);
+            Console.WriteLine("Batch arrived!");
+        }
 
-            if (_pageCounter > _pageSize) return;
-            List<Product> products = await _databaseService.Get(_pageCounter++);
-
-            foreach (Product product in products)
+  
+   
+        private void MapProductViewModel(List<Product> products)
+        {
+            foreach (var product in products)
             {
                 Products.Add(ProductViewModel.MapProduct(product));
             }
-
         }
-
-        public async void InitializeDatabase()
-        {
-            _pageSize = await _databaseService.GetPageTotal();
-            await LoadData();
-        }
+      
     }
 }

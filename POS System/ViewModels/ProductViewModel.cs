@@ -8,10 +8,10 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace POS_System.ViewModels
 {
-    public class ProductViewModel : ViewModel
+    public class ProductViewModel : ViewModelBase
     {
 
-        public string? Id { get; set; }
+        public int? Id { get; set; }
         public string? Name { get; set; }
 
         private string? _sku;
@@ -23,7 +23,7 @@ namespace POS_System.ViewModels
 
         private double _price = 0.0;
 
-
+        public List<string>? Options { get; set; }
         public double? Price
         {
             get => _price;
@@ -35,6 +35,7 @@ namespace POS_System.ViewModels
 
         public static ProductViewModel MapProduct(Product product)
         {
+            var options = product.Options?.Split(',').ToList();
             return new ProductViewModel
             {
                 Id = product.Id,
@@ -42,6 +43,7 @@ namespace POS_System.ViewModels
                 Price = product.Price,
                 Sku = product.Sku,
                 InStock = product.InStock,
+                Options = options,
                 Image = product.Image,
             };
         }

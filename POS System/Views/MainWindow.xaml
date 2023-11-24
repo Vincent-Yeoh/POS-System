@@ -22,7 +22,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="13*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <!--<Grid.ColumnDefinitions>
@@ -35,15 +35,19 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" HorizontalAlignment="Left">
 
-            <TextBlock
+                <Image Margin="20,10,0,10" Source="/Assets/freshhealthyicon.png" />
+
+            </Viewbox>
+            <!--<TextBlock
                 Grid.Column="0"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"
                 Background="Transparent"
                 Foreground="White"
                 Style="{StaticResource TextBlockTitleBold}"
-                Text="Fresh and Healthy" />
+                Text="Fresh and Healthy" />-->
             <WrapPanel
                 Grid.Column="1"
                 Margin="0,0,10,0"
@@ -164,8 +168,8 @@
                                             <ColumnDefinition Width="3*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Grid.Column="0" Text="KG" />
 
+                                        <hc:ComboBox ItemsSource="{Binding Options}" SelectedIndex="0" />
 
                                         <StackPanel
                                             Grid.Column="1"
@@ -176,8 +180,8 @@
 
                                         </StackPanel>
                                         <Grid Grid.Column="2">
-                                            <Button HorizontalAlignment="Center">
-                                                Add to Cart
+                                            <Button HorizontalAlignment="Center" Style="{StaticResource ButtonSuccess}">
+                                                <iconPacks:BootstrapIcons Kind="Cart4" />
                                             </Button>
                                         </Grid>
                                     </Grid>
@@ -200,28 +204,6 @@
                     IsEnabled="{Binding IsLoading, Converter={cv:BooleanInverseConverter}}"
                     Style="{StaticResource ToggleButtonLoading}" />
 
-
-                <!--<hc:ProgressButton
-                    Grid.Row="1"
-                    Command="{Binding LoadCommand}"
-                    Content="Load More">
-
-                    <hc:ProgressButton.Style>
-                        <Style TargetType="hc:ProgressButton">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <hc:LoadingLine VerticalAlignment="Top" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </hc:ProgressButton.Style>
-                </hc:ProgressButton>-->
             </Grid>
         </hc:ScrollViewer>
     </Grid>

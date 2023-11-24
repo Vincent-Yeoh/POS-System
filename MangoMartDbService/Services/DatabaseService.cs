@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using MangoMartDbService;
+using Product = MangoMartDb.Models.Product;
+using CommunityToolkit.Mvvm.Messaging;
+using MangoMartDbService.Messages;
 
 namespace MangoMartDbService.Services
 {
@@ -19,16 +22,12 @@ namespace MangoMartDbService.Services
 
     public class DatabaseService : IDatabaseService
     {
-        private string _username;
-        private string _password;
         private string _url;
         private RestClient _client;
         private LocalDbContextFactory dbFactory;
 
         public DatabaseService(string username, string password, string url, string connectionString)
         {
-            _username = username;
-            _password = password;
             _url = url;
 
             //Ensure that the database file is created/up to date
@@ -40,27 +39,30 @@ namespace MangoMartDbService.Services
 
             var options = new RestClientOptions()
             {
-                Authenticator = new HttpBasicAuthenticator(_username, password)
+                Authenticator = new HttpBasicAuthenticator(username, password)
             };
             _client = new RestClient(options);
 
         }
 
+
+
+
         public async Task<List<Product>> Get(int page)
         {
             try
             {
-                
+
                 string pageUrl = $"{_url}?page={page}";
                 List<ProductDTO> productDTOs = await RetrieveProductData(pageUrl);
                 List<Product> products = await CacheData(productDTOs, page);
-               
+
             }
             catch (Exception ex)
             {
                 //If response fail, fall back on local db 
                 Console.WriteLine(ex);
-                
+
             }
             return GetLocal(page);
 
@@ -68,9 +70,9 @@ namespace MangoMartDbService.Services
 
         private List<Product> GetLocal(int Page)
         {
-            using(var context = dbFactory.CreateDbContext())
+            using (var context = dbFactory.CreateDbContext())
             {
-                return context.Products.Where(x=> x.PageNumber == Page).ToList();
+                return context.Products.Where(x => x.PageNumber == Page).ToList();
             }
         }
 
@@ -83,9 +85,13 @@ namespace MangoMartDbService.Services
                 {
                     if (context.Products.Any(x => x.Id == productDTO.Id)) continue;
                     Product product = await Product.MapDTO(productDTO);
+
                     product.PageNumber = page;
+                    //Add newly stored product in list and db respectively
+                    products.Add(product);
                     context.Products!.Add(product);
                     context.SaveChanges();
+
                 }
             }
             return products;
@@ -101,22 +107,52 @@ namespace MangoMartDbService.Services
             return response;
         }
 
-        private async Task<List<ProductDTO>> RetrieveProductData(string url) {
-            List<ProductDTO> products = new List<ProductDTO>();
+        private async Task<List<ProductDTO>> RetrieveProductData(string url)
+        {
             var response = await RetrieveData(url);
             List<ProductDTO>? product = JsonConvert.DeserializeObject<List<ProductDTO>>(response!.Content!);
             if (product is null) throw new ArgumentNullException(nameof(product));
             return product;
         }
-   
+
         public async Task<int> GetPageTotal()
         {
             var response = await RetrieveData(_url);
-            
+
             if (!int.TryParse(response!.Headers!.ToList().Find(x => x.Name == "X-WP-TotalPages")!.Value!.ToString(), out int totalPages)) throw new ArgumentNullException(nameof(totalPages));
-          
+
             return totalPages;
-           
+
+        }
+
+        public List<Product> InitiateDataStream()
+        {
+            RetrieveAsync();
+            using (var context = dbFactory.CreateDbContext())
+            {
+                return context.Products.ToList();
+            }
+        }
+
+        private async void RetrieveAsync()
+        {
+            try
+            {
+                int pageCount = await GetPageTotal();
+                for (int i = 1; i < pageCount; i++)
+                {
+
+
+                    string pageUrl = $"{_url}?page={i}";
+                    List<ProductDTO> productDTOs = await RetrieveProductData(pageUrl);
+                    List<Product> products = await CacheData(productDTOs, i);
+                    WeakReferenceMessenger.Default.Send(new ProductBatch(products));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
     }
 }

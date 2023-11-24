@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\freshhealthyicon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.1" />
     <PackageReference Include="HandyControl" Version="3.4.0" />
@@ -18,10 +22,16 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="ToastNotifications" Version="2.5.1" />
+    <PackageReference Include="ToastNotifications.Messages" Version="2.5.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MangoMartDbService\MangoMartDbService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\freshhealthyicon.png" />
   </ItemGroup>
 
 </Project>
