@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MangoMartDb
+namespace MangoMartDbService
 {
     public class LocalDbContext : DbContext
     {
@@ -25,7 +25,7 @@ namespace MangoMartDb
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           
+
             optionsBuilder.UseSqlite(_connectionString);
             base.OnConfiguring(optionsBuilder);
         }

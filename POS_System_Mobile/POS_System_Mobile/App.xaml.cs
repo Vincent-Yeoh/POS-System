@@ -28,16 +28,17 @@ namespace POS_System_Mobile
         {
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "MangoLocalDb.db3");
 
-            if (File.Exists(dbPath))
-            {
-                // Delete the database file
-                File.Delete(dbPath);
-                Console.WriteLine("Database file deleted successfully.");
-            }
-            else
-            {
-                Console.WriteLine("Database file does not exist.");
-            }
+            //Testing purposes
+            //if (File.Exists(dbPath))
+            //{
+            //    // Delete the database file
+            //    File.Delete(dbPath);
+            //    Console.WriteLine("Database file deleted successfully.");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Database file does not exist.");
+            //}
 
 
 

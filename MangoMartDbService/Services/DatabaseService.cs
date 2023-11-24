@@ -11,7 +11,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
-using MangoMartDbService;
 using Product = MangoMartDb.Models.Product;
 using CommunityToolkit.Mvvm.Messaging;
 using MangoMartDbService.Messages;
@@ -45,7 +44,56 @@ namespace MangoMartDbService.Services
 
         }
 
+        public List<Product> InitiateDataStream()
+        {
+            RetrieveAsync();
+            using (var context = dbFactory.CreateDbContext())
+            {
+                return context.Products.ToList();
+            }
+        }
 
+        private async void RetrieveAsync()
+        {
+            try
+            {
+                int pageCount = await GetPageTotal();
+                for (int i = 1; i < pageCount; i++)
+                {
+
+
+                    string pageUrl = $"{_url}?page={i}";
+                    List<ProductDTO> productDTOs = await RetrieveProductData(pageUrl);
+                    List<Product> products = await CacheData(productDTOs, i);
+                    WeakReferenceMessenger.Default.Send(new ProductBatch(products));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        private async Task<List<Product>> CacheData(List<ProductDTO> productDTOs, int page)
+        {
+            List<Product> products = new List<Product>();
+            using (var context = dbFactory.CreateDbContext())
+            {
+                foreach (var productDTO in productDTOs)
+                {
+                    if (context.Products.Any(x => x.Id == productDTO.Id)) continue;
+                    Product product = await Product.MapDTO(productDTO);
+
+                    product.PageNumber = page;
+                    //Add newly stored product in list and db respectively
+                    products.Add(product);
+                    context.Products!.Add(product);
+                    context.SaveChanges();
+
+                }
+            }
+            return products;
+        }
 
 
         public async Task<List<Product>> Get(int page)
@@ -76,27 +124,6 @@ namespace MangoMartDbService.Services
             }
         }
 
-        private async Task<List<Product>> CacheData(List<ProductDTO> productDTOs, int page)
-        {
-            List<Product> products = new List<Product>();
-            using (var context = dbFactory.CreateDbContext())
-            {
-                foreach (var productDTO in productDTOs)
-                {
-                    if (context.Products.Any(x => x.Id == productDTO.Id)) continue;
-                    Product product = await Product.MapDTO(productDTO);
-
-                    product.PageNumber = page;
-                    //Add newly stored product in list and db respectively
-                    products.Add(product);
-                    context.Products!.Add(product);
-                    context.SaveChanges();
-
-                }
-            }
-            return products;
-        }
-
 
         private async Task<RestResponseBase?> RetrieveData(string url)
         {
@@ -125,34 +152,8 @@ namespace MangoMartDbService.Services
 
         }
 
-        public List<Product> InitiateDataStream()
-        {
-            RetrieveAsync();
-            using (var context = dbFactory.CreateDbContext())
-            {
-                return context.Products.ToList();
-            }
-        }
+      
 
-        private async void RetrieveAsync()
-        {
-            try
-            {
-                int pageCount = await GetPageTotal();
-                for (int i = 1; i < pageCount; i++)
-                {
-
-
-                    string pageUrl = $"{_url}?page={i}";
-                    List<ProductDTO> productDTOs = await RetrieveProductData(pageUrl);
-                    List<Product> products = await CacheData(productDTOs, i);
-                    WeakReferenceMessenger.Default.Send(new ProductBatch(products));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
+       
     }
 }
